@@ -60,11 +60,11 @@ const Welcome: React.FC<WelcomeProps> = ({
     const getAuthCode = async () => {
       if (code) {
         const authToken = await getUserAuthToken(code);
-        updateAuthToken(authToken.data);
+        updateAuthToken(authToken.data.access_token);
       }
     };
     getAuthCode();
-  }, [code]);
+  }, []);
 
   return (
     <>
@@ -120,6 +120,7 @@ const Welcome: React.FC<WelcomeProps> = ({
           </Button>
         )}
         <br />
+        {authToken}
       </div>
     </>
   );

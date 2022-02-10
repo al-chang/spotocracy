@@ -10,9 +10,17 @@ export const fetchAuthToken = async () => {
   return result;
 };
 
+interface AuthTokenResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+}
+
 export const getUserAuthToken = async (code: string) => {
-  const result = await axios.get<string>(
+  const result = await axios.get<AuthTokenResponse>(
     `http://localhost:8080/spotify/userAuthToken?code=${code}`
   );
+  console.log(result);
   return result;
 };
