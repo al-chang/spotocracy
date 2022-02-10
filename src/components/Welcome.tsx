@@ -1,4 +1,9 @@
 import React from "react";
+import {
+  AuthTokenProvider,
+  useAuthTokenContext,
+  useAuthTokenUpdateContext,
+} from "../hooks/AuthTokenContext";
 
 import {
   Input,
@@ -24,6 +29,7 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
+import { fetchAuthToken } from "../api/api";
 
 interface WelcomeProps {
   createRoom: () => void;
@@ -38,6 +44,9 @@ const Welcome: React.FC<WelcomeProps> = ({
 }) => {
   let navigate = useNavigate();
 
+  const authToken = useAuthTokenContext();
+  const updateAuthToken = useAuthTokenUpdateContext();
+
   return (
     <>
       <Heading className="welcome-header">Spotify Party</Heading>
@@ -48,7 +57,10 @@ const Welcome: React.FC<WelcomeProps> = ({
             <Input
               id="room-code"
               type="room-code"
-              onChange={(input) => setRoomID(input.target.value)}
+              onChange={(input) => {
+                setRoomID(input.target.value);
+                updateAuthToken(input.target.value);
+              }}
             />
           </FormControl>
 
@@ -63,14 +75,19 @@ const Welcome: React.FC<WelcomeProps> = ({
             Join Room
           </Button>
         </div>
-        <Button
-          onClick={() => {
-            createRoom();
-            navigate(`/queue`);
-          }}
-        >
-          Create Room
-        </Button>
+
+        {!authToken ? (
+          <Button onClick={fetchAuthToken}>Log In With Spotify</Button>
+        ) : (
+          <Button
+            onClick={() => {
+              createRoom();
+              navigate(`/queue`);
+            }}
+          >
+            Create Room
+          </Button>
+        )}
         <br />
       </div>
     </>
