@@ -3,7 +3,10 @@ import io from "socket.io-client";
 import Welcome from "./components/Welcome";
 import AddSong from "./components/AddSong";
 import QueuePage from "./components/QueuePage";
-import { AuthTokenProvider } from "./hooks/AuthTokenContext";
+import {
+  AuthTokenProvider,
+  useAuthTokenContext,
+} from "./hooks/AuthTokenContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const App: React.FC = () => {
@@ -29,8 +32,10 @@ const App: React.FC = () => {
     });
   }, [socket]);
 
+  const authToken = useAuthTokenContext();
+
   const createRoom = () => {
-    socket.emit("createRoom", { isPublic: true });
+    socket.emit("createRoom", { spotifyKey: authToken, isPublic: true });
   };
 
   const joinRoom = () => {

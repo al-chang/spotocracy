@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AuthTokenProvider,
   useAuthTokenContext,
@@ -28,8 +28,12 @@ import {
   Link,
   Navigate,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
-import { fetchAuthToken } from "../api/api";
+import { fetchAuthToken, getUserAuthToken } from "../api/api";
+import { stringify } from "querystring";
+import { generateRandomString } from "../utils/Utils";
+// import "dotenv/config";
 
 interface WelcomeProps {
   createRoom: () => void;
@@ -46,6 +50,21 @@ const Welcome: React.FC<WelcomeProps> = ({
 
   const authToken = useAuthTokenContext();
   const updateAuthToken = useAuthTokenUpdateContext();
+
+  const state = generateRandomString(16);
+
+  const search = useLocation().search;
+  const code = new URLSearchParams(search).get("code");
+
+  useEffect(() => {
+    const getAuthCode = async () => {
+      if (code) {
+        const authToken = await getUserAuthToken(code);
+        updateAuthToken(authToken.data);
+      }
+    };
+    getAuthCode();
+  }, [code]);
 
   return (
     <>
@@ -77,7 +96,19 @@ const Welcome: React.FC<WelcomeProps> = ({
         </div>
 
         {!authToken ? (
-          <Button onClick={fetchAuthToken}>Log In With Spotify</Button>
+          // <Button onClick={fetchAuthToken}>Log In With Spotify</Button>
+          // eslint-disable-next-line jsx-a11y/anchor-has-content
+          <a
+            href={`https://accounts.spotify.com/authorize?${stringify({
+              response_type: "code",
+              client_id: process.env.REACT_APP_CLIENT_ID,
+              scope: process.env.REACT_APP_SCOPE,
+              redirect_uri: process.env.REACT_APP_REDIRECT_URI,
+              state: state,
+            })}`}
+          >
+            Log In With Spotify
+          </a>
         ) : (
           <Button
             onClick={() => {
