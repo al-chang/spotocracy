@@ -50,7 +50,7 @@ const QueuePage: React.FC<QueuePageProps> = ({
       >
         Add Song
       </Button>
-      <Songs queue={songQueue} />;
+      <Songs queue={songQueue} />
     </>
   );
 };
