@@ -30,16 +30,25 @@ const App: React.FC = () => {
       setRoomID(joinedRoomId);
       setSongQueue(songs);
     });
+    socket.on("searchResults", (searchResults) => {
+      setSongResults(searchResults);
+    });
   }, [socket]);
+
+  const [songResults, setSongResults] = useState([]);
 
   const authToken = useAuthTokenContext();
 
   const createRoom = () => {
-    socket.emit("createRoom", { spotifyKey: authToken, isPublic: true });
+    socket.emit("createRoom", { spotifyKey: authToken, isPublic: false });
   };
 
   const joinRoom = () => {
     socket.emit("joinRoom", roomID);
+  };
+
+  const searchSong = (songName: string) => {
+    socket.emit("searchSong", { songName });
   };
 
   const submitSong = () => {
@@ -51,44 +60,42 @@ const App: React.FC = () => {
 
   return (
     <div className="router">
-      <AuthTokenProvider>
-        <Router>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Welcome
-                  createRoom={createRoom}
-                  joinRoom={joinRoom}
-                  setRoomID={setRoomID}
-                />
-              }
-            />
-            <Route
-              path="/queue"
-              element={
-                <QueuePage
-                  roomID={roomID}
-                  songQueue={songQueue}
-                  setAddingSong={setAddingSong}
-                />
-              }
-            />
-            <Route
-              path="/add-song"
-              element={
-                <AddSong
-                  songInput={songInput}
-                  setSongInput={setSongInput}
-                  submitSong={submitSong}
-                  showSearchResults={showSearchResults}
-                  setShowSearchResults={setShowSearchResults}
-                />
-              }
-            />
-          </Routes>
-        </Router>
-      </AuthTokenProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Welcome
+                createRoom={createRoom}
+                joinRoom={joinRoom}
+                setRoomID={setRoomID}
+              />
+            }
+          />
+          <Route
+            path="/queue"
+            element={
+              <QueuePage
+                roomID={roomID}
+                songQueue={songQueue}
+                setAddingSong={setAddingSong}
+              />
+            }
+          />
+          <Route
+            path="/add-song"
+            element={
+              <AddSong
+                songInput={songInput}
+                setSongInput={setSongInput}
+                submitSong={submitSong}
+                showSearchResults={showSearchResults}
+                setShowSearchResults={setShowSearchResults}
+              />
+            }
+          />
+        </Routes>
+      </Router>
     </div>
   );
 };
