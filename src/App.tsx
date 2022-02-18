@@ -30,12 +30,7 @@ const App: React.FC = () => {
       setRoomID(joinedRoomId);
       setSongQueue(songs);
     });
-    socket.on("searchResults", (searchResults) => {
-      setSongResults(searchResults);
-    });
   }, [socket]);
-
-  const [songResults, setSongResults] = useState([]);
 
   const authToken = useAuthTokenContext();
 
@@ -45,10 +40,6 @@ const App: React.FC = () => {
 
   const joinRoom = () => {
     socket.emit("joinRoom", roomID);
-  };
-
-  const searchSong = (songName: string) => {
-    socket.emit("searchSong", { songName });
   };
 
   const submitSong = () => {

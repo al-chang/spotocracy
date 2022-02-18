@@ -60,7 +60,7 @@ const Welcome: React.FC<WelcomeProps> = ({
     const getAuthCode = async () => {
       if (code) {
         const authToken = await getUserAuthToken(code);
-        updateAuthToken(authToken.data.access_token);
+        updateAuthToken(authToken.access_token);
       }
     };
     getAuthCode();

@@ -1,11 +1,7 @@
 import axios from "axios";
 
 export const fetchAuthToken = async () => {
-  const result = await axios.get("http://localhost:8080/spotify/login/", {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
+  const result = await axios.get(`${process.env.REACT_APP_URL}/spotify/login/`);
   console.log(result);
   return result;
 };
@@ -19,8 +15,45 @@ interface AuthTokenResponse {
 
 export const getUserAuthToken = async (code: string) => {
   const result = await axios.get<AuthTokenResponse>(
-    `http://localhost:8080/spotify/userAuthToken?code=${code}`
+    `${process.env.REACT_APP_URL}/spotify/userAuthToken?code=${code}`
   );
   console.log(result);
-  return result;
+  return result.data;
+};
+
+interface AlbumData {
+  images: {
+    url: string;
+  }[];
+}
+
+interface SongData {
+  id: string;
+  name: string;
+  duration_ms: number;
+  artists: SongSearchArtist[];
+  album: AlbumData;
+}
+
+interface SongSearchArtist {
+  name: string;
+  id: string;
+}
+
+export interface SongSearchResults {
+  items: SongData[];
+  href: string;
+}
+
+export const getSongs = async (songName: string, artistName?: string) => {
+  const result = await axios.get<SongSearchResults>(
+    `${process.env.REACT_APP_URL}/spotify/searchSong/`,
+    {
+      params: {
+        songName: songName,
+        artistName: artistName,
+      },
+    }
+  );
+  return result.data;
 };
