@@ -54,7 +54,7 @@ export class SpotifyController {
   @Get('searchSong')
   searchSong(@Req() req, @Res() res) {
     const songName = req.query?.songName;
-    const artistName = req.body?.artistName;
+    const artistName = req.query?.artistName;
 
     if (!songName) {
       res.status(400);

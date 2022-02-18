@@ -33,9 +33,13 @@ export class RoomStoreService {
     while (this.rooms[roomID]) {
       roomID = makeRoomID();
     }
-    const newRoom = new Room(roomID, spotifyAuthToken, this.playSong, isPublic);
+    const newRoom = new Room(
+      roomID,
+      spotifyAuthToken,
+      this.spotifyService.playSong,
+      isPublic,
+    );
     this.rooms[roomID] = newRoom;
-    console.log(this.rooms[roomID]);
 
     return roomID;
   }
@@ -56,7 +60,23 @@ export class RoomStoreService {
     return false;
   }
 
-  playSong = (authToken: string, songURI: string) => {
-    this.spotifyService.playSong(authToken, songURI);
-  };
+  addSong(
+    roomID: string,
+    songName: string,
+    songID: string,
+    songDuration: number,
+  ) {
+    const room = this.getRoom(roomID);
+    if (!room) {
+      // TODO
+      console.log('Room not found');
+    }
+
+    room.addSong({
+      songName: songName,
+      songURI: songID,
+      songDuration: songDuration,
+      votes: 0,
+    });
+  }
 }

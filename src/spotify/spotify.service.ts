@@ -86,7 +86,7 @@ export class SpotifyService {
       Method.PUT,
       authToken,
     );
-    const req = request(options, (res) => console.log(res));
+    const req = request(options, (res) => console.log('Received response'));
     req.write(dataString);
     // req.on('error', (error) => console.error(error));
     req.end();

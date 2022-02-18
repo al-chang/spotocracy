@@ -72,13 +72,24 @@ export class RoomGateway {
   }
 
   @SubscribeMessage('addSong')
-  handleAddSong(client: Socket, message: { roomID: string; songName: string }) {
+  handleAddSong(
+    client: Socket,
+    message: {
+      roomID: string;
+      songName: string;
+      songURI: string;
+      songDuration: number;
+    },
+  ) {
     console.log(message);
-    const currrentRoom = this.roomStore.getRoom(message.roomID);
-    if (!currrentRoom) {
-      return;
-    }
-    // currrentRoom.addSong(message.songName);
-    this.wss.to(message.roomID).emit('songAdded', currrentRoom.allSongs);
+    this.roomStore.addSong(
+      message.roomID,
+      message.songName,
+      message.songURI,
+      message.songDuration,
+    );
+    const currentRoom = this.roomStore.getRoom(message.roomID);
+
+    this.wss.to(message.roomID).emit('songAdded', currentRoom.allSongs);
   }
 }

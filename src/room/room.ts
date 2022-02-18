@@ -6,6 +6,7 @@ export class Room {
   private songQueue: SongQueue;
   private numListeners: number;
   private isPlaying = false;
+  private currentInterval = undefined;
 
   constructor(
     private roomID: string,
@@ -51,14 +52,22 @@ export class Room {
     return true;
   }
 
-  playNextSong() {
-    const nextSong = this.songQueue.pop();
-    if (nextSong) {
+  private playNextSong() {
+    const songToPlay = this.songQueue.pop();
+    if (songToPlay) {
       this.isPlaying = true;
-      this.playSong(this.spotifyAuthToken, nextSong.songURI);
-      setInterval(() => this.playNextSong(), nextSong.songDuration);
+      this.playSong(this.spotifyAuthToken, songToPlay.songURI);
+      this.currentInterval = setInterval(
+        () => this.playNextSong(),
+        songToPlay.songDuration,
+      );
     } else {
       this.isPlaying = false;
     }
+  }
+
+  skipSong() {
+    clearInterval(this.currentInterval);
+    this.playNextSong();
   }
 }
