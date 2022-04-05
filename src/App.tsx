@@ -1,93 +1,43 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
-import Welcome from "./components/Welcome";
-import AddSong from "./components/AddSong";
-import QueuePage from "./components/QueuePage";
-import {
-  AuthTokenProvider,
-  useAuthTokenContext,
-} from "./hooks/AuthTokenContext";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Welcome from "./pages/Welcome";
+import Queue from "./pages/Queue";
+import Header from "./components/Header";
+import { io, Socket } from "socket.io-client";
 
 const App: React.FC = () => {
-  const socket = io("http://127.0.0.1:80/");
-
-  const [joinedRoom, setJoinedRoom] = useState(false);
   const [roomID, setRoomID] = useState("");
-  const [songInput, setSongInput] = useState("");
-  const [songQueue, setSongQueue] = useState<string[]>([]);
-  const [addingSong, setAddingSong] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [createRoom, setCreateRoom] = useState<boolean>(false);
+  const [socket, setSocket] = useState<Socket>();
 
   useEffect(() => {
-    socket.on("createdRoom", (roomID) => {
-      setRoomID(roomID);
-      setJoinedRoom(true);
-    });
-    socket.on("songAdded", (songList) => setSongQueue(songList));
-    socket.on("joinedRoom", (joinedRoomId, songs) => {
-      setJoinedRoom(true);
-      setRoomID(joinedRoomId);
-      setSongQueue(songs);
-    });
-  }, [socket]);
-
-  const authToken = useAuthTokenContext();
-
-  const createRoom = () => {
-    socket.emit("createRoom", { spotifyKey: authToken, isPublic: false });
-  };
-
-  const joinRoom = () => {
-    socket.emit("joinRoom", roomID);
-  };
-
-  const submitSong = () => {
-    socket.emit("addSong", { roomID: roomID, songName: songInput });
-    setAddingSong(false);
-    setShowSearchResults(false);
-    setSongInput("");
-  };
+    const newSocket = io("http://127.0.0.1:80/");
+    setSocket(newSocket);
+    return () => {
+      newSocket.close();
+    };
+  }, [setSocket]);
 
   return (
-    <div className="router">
+    <>
       <Router>
+        <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <Welcome
-                createRoom={createRoom}
-                joinRoom={joinRoom}
-                setRoomID={setRoomID}
-              />
+              <Welcome setCreateRoom={setCreateRoom} setRoomID={setRoomID} />
             }
           />
           <Route
             path="/queue"
             element={
-              <QueuePage
-                roomID={roomID}
-                songQueue={songQueue}
-                setAddingSong={setAddingSong}
-              />
-            }
-          />
-          <Route
-            path="/add-song"
-            element={
-              <AddSong
-                songInput={songInput}
-                setSongInput={setSongInput}
-                submitSong={submitSong}
-                showSearchResults={showSearchResults}
-                setShowSearchResults={setShowSearchResults}
-              />
+              <Queue createRoom={createRoom} roomID={roomID} socket={socket!} />
             }
           />
         </Routes>
       </Router>
-    </div>
+    </>
   );
 };
 

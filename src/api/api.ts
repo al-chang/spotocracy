@@ -17,7 +17,6 @@ export const getUserAuthToken = async (code: string) => {
   const result = await axios.get<AuthTokenResponse>(
     `${process.env.REACT_APP_URL}/spotify/userAuthToken?code=${code}`
   );
-  console.log(result);
   return result.data;
 };
 
