@@ -12,10 +12,11 @@ const Header: React.FC = () => {
       <Flex
         justifyContent="space-between"
         alignItems="baseline"
-        margin="10px 50px"
+        margin={{ base: "10px 20px", md: "10px 50px" }}
       >
         <Heading
           as="h1"
+          fontSize={{ base: "24px", md: "48px" }}
           onClick={() => navigate("/")}
           _hover={{ cursor: "pointer" }}
         >

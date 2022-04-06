@@ -51,7 +51,6 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
               type="room-code"
               onChange={(input) => {
                 setRoomID(input.target.value);
-                updateAuthToken(input.target.value);
               }}
             />
           </FormControl>
@@ -91,8 +90,6 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
             Create Room
           </Button>
         )}
-        <br />
-        {authToken}
       </div>
     </>
   );

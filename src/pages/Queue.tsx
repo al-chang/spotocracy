@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import AddSong from "../components/AddSong";
+import NowPlaying from "../components/NowPlaying";
 import SongVote from "../components/SongVote";
 import { useAuthTokenContext } from "../hooks/AuthTokenContext";
 import { useRoomContext, useRoomUpdateContext } from "../hooks/RoomContext";
@@ -62,19 +63,30 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     socket.on("songAdded", (songList: SongData[]) =>
       setRoomData({ ...roomData, songQueue: songList })
     );
-    socket.on("joinedRoom", (roomID: string, songs: SongData[]) => {
-      setRoomData({ ...roomData, roomID: roomID, songQueue: songs });
-    });
-    socket.on("nowPlaying", (song: SongData, songQueue: SongData[]) => {
-      setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
-    });
+    socket.on(
+      "joinedRoom",
+      (roomID: string, songs: SongData[], nowPlaying: SongData) => {
+        setRoomData({
+          ...roomData,
+          roomID: roomID,
+          songQueue: songs,
+          nowPlaying: nowPlaying,
+        });
+      }
+    );
+    socket.on(
+      "nowPlaying",
+      (song: SongData | undefined, songQueue: SongData[]) => {
+        setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
+      }
+    );
   }, [navigate, roomData, setRoomData, socket]);
 
   return (
     <>
-      <Grid templateColumns="1fr 3fr">
+      <Grid templateColumns={{ base: "1fr", md: "1fr 3fr" }} gap="20px">
         <div>
-          <p>{roomData.nowPlaying?.name ?? " Currently Playing"}</p>
+          {roomData.nowPlaying && <NowPlaying song={roomData.nowPlaying} />}
           {addSong ? (
             <Button onClick={() => setAddSong(false)}>Go To Queue</Button>
           ) : (
