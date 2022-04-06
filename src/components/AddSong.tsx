@@ -9,11 +9,10 @@ import SearchResult from "./SearchResult";
 import { SongData, SongSearchResults } from "../Types";
 
 interface AddSongProps {
-  setAddSong: (value: boolean) => void;
   submitSong: (songData: SongData) => void;
 }
 
-const AddSong: React.FC<AddSongProps> = ({ setAddSong, submitSong }) => {
+const AddSong: React.FC<AddSongProps> = ({ submitSong }) => {
   const [songInput, setSongInput] = useState<string>("");
   const [songOptions, setSongOptions] = useState<SongSearchResults>();
 
@@ -25,7 +24,6 @@ const AddSong: React.FC<AddSongProps> = ({ setAddSong, submitSong }) => {
   return (
     <>
       <Heading>Add Song</Heading>
-      <Button onClick={() => setAddSong(false)}>Return to Queue</Button>
       <Input
         placeholder="Enter a song name"
         value={songInput}

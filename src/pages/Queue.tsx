@@ -46,22 +46,27 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
 
     return () => {
       socket.emit("leaveRoom", roomID);
-      setRoomData({ roomID: "", songQueue: [] });
+      setRoomData({ roomID: "", songQueue: [], nowPlaying: undefined });
     };
+    // This is necessary because it does not properly create / join a room with all dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authToken, createRoom, roomID, socket]);
 
   useEffect(() => {
     socket.on("joinRoomFailed", () => navigate("/"));
     socket.on("createRoomFailed", () => navigate("/"));
 
-    socket.on("createdRoom", (roomID) => {
+    socket.on("createdRoom", (roomID: string) => {
       setRoomData({ ...roomData, roomID: roomID });
     });
-    socket.on("songAdded", (songList) =>
+    socket.on("songAdded", (songList: SongData[]) =>
       setRoomData({ ...roomData, songQueue: songList })
     );
-    socket.on("joinedRoom", (roomID, songs) => {
+    socket.on("joinedRoom", (roomID: string, songs: SongData[]) => {
       setRoomData({ ...roomData, roomID: roomID, songQueue: songs });
+    });
+    socket.on("nowPlaying", (song: SongData, songQueue: SongData[]) => {
+      setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
     });
   }, [navigate, roomData, setRoomData, socket]);
 
@@ -69,8 +74,12 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     <>
       <Grid templateColumns="1fr 3fr">
         <div>
-          <p>Currently Playing</p>
-          <Button onClick={() => setAddSong(true)}>Add Song</Button>
+          <p>{roomData.nowPlaying?.name ?? " Currently Playing"}</p>
+          {addSong ? (
+            <Button onClick={() => setAddSong(false)}>Go To Queue</Button>
+          ) : (
+            <Button onClick={() => setAddSong(true)}>Add Song</Button>
+          )}
         </div>
         <div>
           {!addSong ? (
@@ -82,7 +91,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
               />
             ))
           ) : (
-            <AddSong setAddSong={setAddSong} submitSong={addSongToQueue} />
+            <AddSong submitSong={addSongToQueue} />
           )}
         </div>
       </Grid>

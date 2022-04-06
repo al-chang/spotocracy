@@ -4,6 +4,7 @@ import { SongData } from "../Types";
 export interface RoomData {
   roomID: string;
   songQueue: SongData[];
+  nowPlaying?: SongData;
 }
 
 const RoomContext = React.createContext<RoomData>({
