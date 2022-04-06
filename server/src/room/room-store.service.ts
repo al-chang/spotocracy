@@ -75,6 +75,7 @@ export class RoomStoreService {
     if (!room) {
       // TODO
       console.log('Room not found');
+      return;
     }
 
     room.addSong(song);

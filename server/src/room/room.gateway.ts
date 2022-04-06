@@ -101,6 +101,10 @@ export class RoomGateway {
       song: Song;
     },
   ) {
+    if (!message.roomID) {
+      return;
+    }
+
     this.roomStore.addSong(message.roomID, message.song);
     const currentRoom = this.roomStore.getRoom(message.roomID);
 
