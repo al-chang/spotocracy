@@ -18,7 +18,7 @@ const SearchResult: React.FC<SearchResultProps> = ({
     <>
       <Grid templateColumns="4fr 1fr" style={style}>
         <Song songData={songData} />
-        <Box alignSelf="center">
+        <Box alignSelf="center" justifySelf="center">
           <Button onClick={() => submitSong(songData)}>Add Song</Button>
         </Box>
       </Grid>

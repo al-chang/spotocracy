@@ -21,7 +21,10 @@ const Song: React.FC<SongProps> = ({ songData }) => {
         </Heading>
         <Heading as="h4" size="sm">
           {songData.artists.map((artistData, index) => (
-            <span key={index}>{artistData.name}</span>
+            <span key={index}>
+              {artistData.name}
+              {index < songData.artists.length - 1 && ", "}
+            </span>
           ))}
         </Heading>
       </Flex>

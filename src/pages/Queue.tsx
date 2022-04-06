@@ -46,6 +46,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
 
     return () => {
       socket.emit("leaveRoom", roomID);
+      setRoomData({ roomID: "", songQueue: [] });
     };
   }, [authToken, createRoom, roomID, socket]);
 
