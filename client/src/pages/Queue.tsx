@@ -1,13 +1,13 @@
-import { Button, Grid } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Socket } from "socket.io-client";
-import AddSong from "../components/AddSong";
-import NowPlaying from "../components/NowPlaying";
-import SongVote from "../components/SongVote";
-import { useAuthTokenContext } from "../hooks/AuthTokenContext";
-import { useRoomContext, useRoomUpdateContext } from "../hooks/RoomContext";
-import { SongData } from "../Types";
+import { Button, Grid } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
+import AddSong from '../components/AddSong';
+import NowPlaying from '../components/NowPlaying';
+import SongVote from '../components/SongVote';
+import { useAuthTokenContext } from '../hooks/AuthTokenContext';
+import { useRoomContext, useRoomUpdateContext } from '../hooks/RoomContext';
+import { SongData } from '../Types';
 
 interface QueueProps {
   createRoom: boolean;
@@ -26,7 +26,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
   const authToken = useAuthTokenContext();
 
   const addSongToQueue = (songData: SongData) => {
-    socket.emit("addSong", {
+    socket.emit('addSong', {
       roomID: roomData.roomID,
       song: {
         id: songData.id,
@@ -40,31 +40,35 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
 
   useEffect(() => {
     if (createRoom) {
-      socket.emit("createRoom", { spotifyKey: authToken, isPublic: false });
+      socket.emit('createRoom', { spotifyKey: authToken, isPublic: false });
     } else {
-      socket.emit("joinRoom", roomID);
+      socket.emit('joinRoom', roomID);
     }
 
     return () => {
-      socket.emit("leaveRoom", roomID);
-      setRoomData({ roomID: "", songQueue: [], nowPlaying: undefined });
+      socket.emit('leaveRoom', roomID);
     };
     // This is necessary because it does not properly create / join a room with all dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authToken, createRoom, roomID, socket]);
 
   useEffect(() => {
-    socket.on("joinRoomFailed", () => navigate("/"));
-    socket.on("createRoomFailed", () => navigate("/"));
+    socket.on('joinRoomFailed', () => navigate('/'));
+    socket.on('createRoomFailed', () => navigate('/'));
 
-    socket.on("createdRoom", (roomID: string) => {
-      setRoomData({ ...roomData, roomID: roomID });
+    socket.on('createdRoom', (roomID: string) => {
+      setRoomData({
+        ...roomData,
+        roomID: roomID,
+        songQueue: [],
+        nowPlaying: undefined,
+      });
     });
-    socket.on("songAdded", (songList: SongData[]) =>
-      setRoomData({ ...roomData, songQueue: songList })
+    socket.on('songAdded', (songList: SongData[]) =>
+      setRoomData({ ...roomData, songQueue: songList }),
     );
     socket.on(
-      "joinedRoom",
+      'joinedRoom',
       (roomID: string, songs: SongData[], nowPlaying: SongData) => {
         setRoomData({
           ...roomData,
@@ -72,19 +76,19 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
           songQueue: songs,
           nowPlaying: nowPlaying,
         });
-      }
+      },
     );
     socket.on(
-      "nowPlaying",
+      'nowPlaying',
       (song: SongData | undefined, songQueue: SongData[]) => {
         setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
-      }
+      },
     );
   }, [navigate, roomData, setRoomData, socket]);
 
   return (
     <>
-      <Grid templateColumns={{ base: "1fr", md: "1fr 3fr" }} gap="20px">
+      <Grid templateColumns={{ base: '1fr', md: '1fr 3fr' }} gap="20px">
         <div>
           {roomData.nowPlaying && <NowPlaying song={roomData.nowPlaying} />}
           {addSong ? (
@@ -99,7 +103,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
               <SongVote
                 key={songData.id}
                 songData={songData}
-                style={{ margin: "10px 0" }}
+                style={{ margin: '10px 0' }}
               />
             ))
           ) : (
