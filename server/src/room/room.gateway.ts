@@ -7,7 +7,7 @@ import { Server, Socket } from 'socket.io';
 import { Song } from 'src/Types';
 import { RoomStoreService } from './room-store.service';
 
-@WebSocketGateway(80, {
+@WebSocketGateway({
   cors: {
     origin: process.env.CLIENT_URL,
   },
