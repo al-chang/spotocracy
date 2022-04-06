@@ -9,7 +9,7 @@ import { RoomStoreService } from './room-store.service';
 
 @WebSocketGateway(80, {
   cors: {
-    origin: '*',
+    origin: process.env.CLIENT_URL,
   },
 })
 export class RoomGateway {
