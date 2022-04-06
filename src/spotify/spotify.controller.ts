@@ -16,8 +16,6 @@ export class SpotifyController {
   @Get('userAuthToken')
   async getUserAuthToken(@Req() req, @Res() res) {
     const code = req.query.code;
-    // // const state = req.query.state;
-    // // const storedState = req.cookies ? req.cookies[this.stateKey] : null;
 
     const data = stringify({
       grant_type: 'authorization_code',

@@ -17,6 +17,17 @@ export class RoomGateway {
 
   constructor(private roomStore: RoomStoreService) {}
 
+  /**
+   * Call back function provided to rooms. Allows room to emit message to clients
+   * when a new song starts to play.
+   *
+   * @param roomID the id of the room that the message is sent to
+   * @param song the song information of the now playing song
+   */
+  nowPlaying = (roomID: string, song: Song, songQueue: Song[]) => {
+    this.wss.to(roomID).emit('nowPlaying', song, songQueue);
+  };
+
   @SubscribeMessage('connection')
   handleConnection(client: Socket) {
     client.emit('success');
@@ -28,9 +39,9 @@ export class RoomGateway {
     message: { spotifyKey: string; isPublic?: boolean },
   ) {
     try {
-      console.log(message);
       const newRoomID = this.roomStore.createRoom(
         message.spotifyKey,
+        this.nowPlaying,
         message.isPublic,
       );
 

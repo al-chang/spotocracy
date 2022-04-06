@@ -24,7 +24,15 @@ export class RoomStoreService {
    *
    * @returns the new room's id
    */
-  createRoom(spotifyAuthToken: string, isPublic?: boolean): string {
+  createRoom(
+    spotifyAuthToken: string,
+    nowPlayingCallBack: (
+      roomdID: string,
+      song: Song,
+      songQueue: Song[],
+    ) => void,
+    isPublic?: boolean,
+  ): string {
     if (!spotifyAuthToken) {
       throw new Error('Spotify Token Required!');
     }
@@ -38,6 +46,7 @@ export class RoomStoreService {
       roomID,
       spotifyAuthToken,
       this.spotifyService.playSong,
+      nowPlayingCallBack,
       isPublic,
     );
     this.rooms[roomID] = newRoom;

@@ -12,6 +12,11 @@ export class Room {
     private roomID: string,
     private spotifyAuthToken: string,
     private playSong: (authToken: string, songID: string) => void,
+    private nowPlayingCallback: (
+      roomID: string,
+      song: Song,
+      songQueue: Song[],
+    ) => void,
     private publicRoom?: boolean,
   ) {
     this.songQueue = [];
@@ -57,6 +62,7 @@ export class Room {
     if (songToPlay) {
       this.isPlaying = true;
       this.playSong(this.spotifyAuthToken, songToPlay.id);
+      this.nowPlayingCallback(this.id, songToPlay, this.songQueue);
       this.currentTimeout = setTimeout(
         () => this.playNextSong(),
         songToPlay.duration_ms,
