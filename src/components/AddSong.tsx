@@ -1,28 +1,16 @@
 import React from "react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import {
-  Input,
-  Heading,
-  Grid,
-  GridItem,
-  Button,
-  ButtonGroup,
-} from "@chakra-ui/react";
+import { Input, Heading, Button } from "@chakra-ui/react";
 
 import { getSongs } from "../api/api";
 import SearchResult from "./SearchResult";
-import { SongArtist, SongSearchResults } from "../Types";
+import { SongData, SongSearchResults } from "../Types";
 
 interface AddSongProps {
   setAddSong: (value: boolean) => void;
-  submitSong: (
-    songName: string,
-    songURI: string,
-    songDuration: number,
-    songArtists: SongArtist[]
-  ) => void;
+  submitSong: (songData: SongData) => void;
 }
 
 const AddSong: React.FC<AddSongProps> = ({ setAddSong, submitSong }) => {
@@ -53,6 +41,7 @@ const AddSong: React.FC<AddSongProps> = ({ setAddSong, submitSong }) => {
             key={songData.id}
             submitSong={submitSong}
             songData={songData}
+            style={{ margin: "10px 0" }}
           />
         ))}
     </>

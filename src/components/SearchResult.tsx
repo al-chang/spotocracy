@@ -1,43 +1,25 @@
 import { Box, Button, Grid } from "@chakra-ui/react";
 import React from "react";
-import { SongArtist, SongData } from "../Types";
+import { SongData } from "../Types";
+import Song from "./Song";
 
 interface SearchResultProps {
   songData: SongData;
-  submitSong: (
-    songName: string,
-    songURI: string,
-    songDuration: number,
-    songArtists: SongArtist[]
-  ) => void;
+  submitSong: (songData: SongData) => void;
+  style?: React.CSSProperties;
 }
 
 const SearchResult: React.FC<SearchResultProps> = ({
   songData,
   submitSong,
+  style,
 }) => {
   return (
     <>
-      <Grid templateColumns="1fr 1fr">
-        <Box>
-          Song Name: {songData.name} <br /> Artist:{" "}
-          {songData.artists.map((artistData, index) => (
-            <span key={index}>{artistData.name}</span>
-          ))}
-        </Box>
-        <Box>
-          <Button
-            onClick={() =>
-              submitSong(
-                songData.name,
-                songData.id,
-                songData.duration_ms,
-                songData.artists
-              )
-            }
-          >
-            Add Song
-          </Button>
+      <Grid templateColumns="4fr 1fr" style={style}>
+        <Song songData={songData} />
+        <Box alignSelf="center">
+          <Button onClick={() => submitSong(songData)}>Add Song</Button>
         </Box>
       </Grid>
     </>

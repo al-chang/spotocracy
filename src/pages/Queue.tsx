@@ -1,12 +1,12 @@
 import { Button, Grid } from "@chakra-ui/react";
-import { randomUUID } from "crypto";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import AddSong from "../components/AddSong";
+import SongVote from "../components/SongVote";
 import { useAuthTokenContext } from "../hooks/AuthTokenContext";
 import { useRoomContext, useRoomUpdateContext } from "../hooks/RoomContext";
-import { SongArtist } from "../Types";
+import { SongData } from "../Types";
 
 interface QueueProps {
   createRoom: boolean;
@@ -24,23 +24,20 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
 
   const authToken = useAuthTokenContext();
 
-  const addSongToQueue = (
-    songName: string,
-    songURI: string,
-    songDuration: number,
-    songArtists: SongArtist[]
-  ) => {
+  const addSongToQueue = (songData: SongData) => {
     socket.emit("addSong", {
       roomID: roomData.roomID,
-      songName,
-      songURI,
-      songDuration,
-      songArtists,
+      song: {
+        id: songData.id,
+        name: songData.name,
+        duration_ms: songData.duration_ms,
+        artists: songData.artists,
+        album: { images: songData.album.images },
+      },
     });
   };
 
   useEffect(() => {
-    console.log("here");
     if (createRoom) {
       socket.emit("createRoom", { spotifyKey: authToken, isPublic: false });
     } else {
@@ -77,7 +74,11 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
         <div>
           {!addSong ? (
             roomData.songQueue.map((songData) => (
-              <p key={Math.random()}>{songData.name}</p>
+              <SongVote
+                key={songData.id}
+                songData={songData}
+                style={{ margin: "10px 0" }}
+              />
             ))
           ) : (
             <AddSong setAddSong={setAddSong} submitSong={addSongToQueue} />
