@@ -7,6 +7,7 @@ export class Room {
   private numListeners: number;
   private isPlaying = false;
   private currentTimeout = undefined;
+  private nowPlaying: Song | undefined = undefined;
 
   constructor(
     private roomID: string,
@@ -39,6 +40,10 @@ export class Room {
     return this.songQueue.map((song) => song);
   }
 
+  get currentSong() {
+    return this.nowPlaying;
+  }
+
   incremenetListeners(): number {
     this.numListeners += 1;
     return this.numListeners;
@@ -50,6 +55,8 @@ export class Room {
   }
 
   addSong(song: Song): boolean {
+    if (this.songQueue.find((_song) => _song.id === song.id)) return;
+
     this.songQueue.push(song);
     if (!this.isPlaying) {
       this.playNextSong();
@@ -61,6 +68,7 @@ export class Room {
     const songToPlay = this.songQueue.shift();
     if (songToPlay) {
       this.isPlaying = true;
+      this.nowPlaying = songToPlay;
       this.playSong(this.spotifyAuthToken, songToPlay.id);
       this.nowPlayingCallback(this.id, songToPlay, this.songQueue);
       this.currentTimeout = setTimeout(
@@ -68,6 +76,8 @@ export class Room {
         songToPlay.duration_ms,
       );
     } else {
+      this.nowPlaying = undefined;
+      this.nowPlayingCallback(this.id, undefined, this.songQueue);
       this.isPlaying = false;
     }
   }

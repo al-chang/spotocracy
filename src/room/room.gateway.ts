@@ -46,6 +46,10 @@ export class RoomGateway {
       );
 
       client.join(newRoomID);
+      client.on('disconnect', () =>
+        this.roomStore.getRoom(newRoomID).decrementListeners(),
+      );
+
       client.emit('createdRoom', newRoomID);
     } catch (err) {
       client.emit('createRoomFail');
@@ -60,8 +64,15 @@ export class RoomGateway {
       client.emit('joinRoomFail');
       return;
     }
+    currentRoom.incremenetListeners();
     client.join(roomID);
-    client.emit('joinedRoom', roomID, currentRoom.allSongs);
+    client.emit(
+      'joinedRoom',
+      roomID,
+      currentRoom.allSongs,
+      currentRoom.currentSong,
+    );
+    client.on('disconnect', () => currentRoom.decrementListeners());
   }
 
   @SubscribeMessage('leaveRoom')
@@ -76,6 +87,9 @@ export class RoomGateway {
       this.roomStore.deleteRoom(room);
     }
     client.leave(room);
+    client.on('disconnect', () => {
+      return;
+    });
     client.emit('leftRoom', room);
   }
 
