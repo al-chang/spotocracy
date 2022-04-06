@@ -1,29 +1,34 @@
 import React from "react";
-import { Spinner } from "@chakra-ui/react";
-import { Grid, GridItem, Button } from "@chakra-ui/react";
-import { useState } from "react";
+import { Image, Flex, Heading } from "@chakra-ui/react";
+import { SongData } from "../Types";
 
 interface SongProps {
-  title: string;
+  songData: SongData;
 }
 
-const Song: React.FC<SongProps> = ({ title }) => {
+const Song: React.FC<SongProps> = ({ songData }) => {
   return (
-    <div className="song">
-      <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-        <GridItem colSpan={4} h="10" className="song-title">
-          {title}
-        </GridItem>
-        <GridItem className="voting" colStart={5} colEnd={6} h="10">
-          <Button colorScheme="teal" variant="ghost">
-            +
-          </Button>
-          <Button colorScheme="teal" variant="ghost">
-            -
-          </Button>
-        </GridItem>
-      </Grid>
-    </div>
+    <Flex flexDir="row">
+      <Image height="100px" src={songData.album.images[0].url} />
+      <Flex
+        flexDir="column"
+        height="inherit"
+        justifyContent="space-evenly"
+        margin={"10px"}
+      >
+        <Heading as="h3" size="md">
+          {songData.name}
+        </Heading>
+        <Heading as="h4" size="sm">
+          {songData.artists.map((artistData, index) => (
+            <span key={index}>
+              {artistData.name}
+              {index < songData.artists.length - 1 && ", "}
+            </span>
+          ))}
+        </Heading>
+      </Flex>
+    </Flex>
   );
 };
 

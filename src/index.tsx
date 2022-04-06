@@ -5,13 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { AuthTokenProvider } from "./hooks/AuthTokenContext";
+import { RoomProvider } from "./hooks/RoomContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthTokenProvider>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
+      <RoomProvider>
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
+      </RoomProvider>
     </AuthTokenProvider>
   </React.StrictMode>,
   document.getElementById("root")

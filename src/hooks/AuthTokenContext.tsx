@@ -1,4 +1,4 @@
-import React, { useContext, useState, FC } from "react";
+import React, { useContext, useState } from "react";
 
 const AuthTokenContext = React.createContext("");
 const AuthTokenUpdateContext = React.createContext((token: string) => {});
@@ -11,7 +11,7 @@ export function useAuthTokenUpdateContext() {
   return useContext(AuthTokenUpdateContext);
 }
 
-export const AuthTokenProvider: FC = ({ children }) => {
+export const AuthTokenProvider: React.FC = ({ children }) => {
   const [authToken, setAuthToken] = useState("");
 
   const updateAuthToken = (token: string) => {

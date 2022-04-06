@@ -1,51 +1,25 @@
 import React, { useEffect } from "react";
 import {
-  AuthTokenProvider,
   useAuthTokenContext,
   useAuthTokenUpdateContext,
 } from "../hooks/AuthTokenContext";
 
-import {
-  Input,
-  Heading,
-  Grid,
-  GridItem,
-  Button,
-  ButtonGroup,
-} from "@chakra-ui/react";
+import { Input, Button } from "@chakra-ui/react";
 
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-} from "@chakra-ui/react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  Navigate,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import { fetchAuthToken, getUserAuthToken } from "../api/api";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getUserAuthToken } from "../api/api";
 import { stringify } from "querystring";
 import { generateRandomString } from "../utils/Utils";
 // import "dotenv/config";
 
 interface WelcomeProps {
-  createRoom: () => void;
-  joinRoom: () => void;
-  setRoomID: (roomID: string) => void;
+  setCreateRoom: (value: boolean) => void;
+  setRoomID: (value: string) => void;
 }
 
-const Welcome: React.FC<WelcomeProps> = ({
-  createRoom,
-  joinRoom,
-  setRoomID,
-}) => {
+const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
   let navigate = useNavigate();
 
   const authToken = useAuthTokenContext();
@@ -57,18 +31,17 @@ const Welcome: React.FC<WelcomeProps> = ({
   const code = new URLSearchParams(search).get("code");
 
   useEffect(() => {
-    const getAuthCode = async () => {
-      if (code) {
+    const getAuthToken = async () => {
+      if (code && !authToken) {
         const authToken = await getUserAuthToken(code);
         updateAuthToken(authToken.access_token);
       }
     };
-    getAuthCode();
-  }, []);
+    getAuthToken();
+  }, [authToken, code, updateAuthToken]);
 
   return (
     <>
-      <Heading className="welcome-header">Spotify Party</Heading>
       <div className="welcome-form">
         <div className="join-room-form">
           <FormControl>
@@ -85,9 +58,8 @@ const Welcome: React.FC<WelcomeProps> = ({
 
           <Button
             colorScheme="blue"
-            width="90%"
             onClick={() => {
-              joinRoom();
+              setCreateRoom(false);
               navigate(`/queue`);
             }}
           >
@@ -112,7 +84,7 @@ const Welcome: React.FC<WelcomeProps> = ({
         ) : (
           <Button
             onClick={() => {
-              createRoom();
+              setCreateRoom(true);
               navigate(`/queue`);
             }}
           >
