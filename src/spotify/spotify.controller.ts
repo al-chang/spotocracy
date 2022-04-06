@@ -44,7 +44,6 @@ export class SpotifyController {
       res.send(result.data);
     } catch (err) {
       console.error('ERROR occured when fetching user token');
-      console.log(err);
       res.status(400);
       res.send(generateErrorResponse('Unable to fetch user token.'));
     }

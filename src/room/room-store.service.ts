@@ -3,6 +3,7 @@ import { Socket } from 'socket.io';
 import { Room } from './room';
 import { makeRoomID } from 'src/Utils';
 import { SpotifyService } from 'src/spotify/spotify.service';
+import { SongArtists } from 'src/Types';
 
 @Injectable()
 export class RoomStoreService {
@@ -65,6 +66,7 @@ export class RoomStoreService {
     songName: string,
     songID: string,
     songDuration: number,
+    songArtists: SongArtists[],
   ) {
     const room = this.getRoom(roomID);
     if (!room) {
@@ -73,10 +75,11 @@ export class RoomStoreService {
     }
 
     room.addSong({
-      songName: songName,
-      songURI: songID,
-      songDuration: songDuration,
+      name: songName,
+      id: songID,
+      duration_ms: songDuration,
       votes: 0,
+      artists: songArtists,
     });
   }
 }

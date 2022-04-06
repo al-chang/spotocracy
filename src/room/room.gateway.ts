@@ -4,6 +4,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { SongArtists } from 'src/Types';
 import { RoomStoreService } from './room-store.service';
 
 @WebSocketGateway(80, {
@@ -36,6 +37,7 @@ export class RoomGateway {
       client.join(newRoomID);
       client.emit('createdRoom', newRoomID);
     } catch (err) {
+      client.emit('createRoomFail');
       console.error('Error while creating room');
     }
   }
@@ -44,7 +46,7 @@ export class RoomGateway {
   handleJoinRoom(client: Socket, roomID: string) {
     const currentRoom = this.roomStore.getRoom(roomID);
     if (!currentRoom) {
-      // TODO: Throw some kind of error if the room doesn't exist
+      client.emit('joinRoomFail');
       return;
     }
     client.join(roomID);
@@ -79,6 +81,7 @@ export class RoomGateway {
       songName: string;
       songURI: string;
       songDuration: number;
+      songArtists: SongArtists[];
     },
   ) {
     console.log(message);
@@ -87,6 +90,7 @@ export class RoomGateway {
       message.songName,
       message.songURI,
       message.songDuration,
+      message.songArtists,
     );
     const currentRoom = this.roomStore.getRoom(message.roomID);
 

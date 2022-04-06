@@ -1,8 +1,14 @@
 export type SongQueue = Song[];
 
 export interface Song {
-  songName: string;
-  songURI: string;
-  songDuration: number;
+  name: string;
+  id: string;
+  duration_ms: number;
+  artists: SongArtists[];
   votes: number;
+}
+
+export interface SongArtists {
+  name: string;
+  id: string;
 }
