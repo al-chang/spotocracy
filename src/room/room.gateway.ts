@@ -4,7 +4,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { SongArtists } from 'src/Types';
+import { Song } from 'src/Types';
 import { RoomStoreService } from './room-store.service';
 
 @WebSocketGateway(80, {
@@ -68,30 +68,15 @@ export class RoomGateway {
     client.emit('leftRoom', room);
   }
 
-  @SubscribeMessage('close')
-  handleClose() {
-    console.log('in close');
-  }
-
   @SubscribeMessage('addSong')
   handleAddSong(
     client: Socket,
     message: {
       roomID: string;
-      songName: string;
-      songURI: string;
-      songDuration: number;
-      songArtists: SongArtists[];
+      song: Song;
     },
   ) {
-    console.log(message);
-    this.roomStore.addSong(
-      message.roomID,
-      message.songName,
-      message.songURI,
-      message.songDuration,
-      message.songArtists,
-    );
+    this.roomStore.addSong(message.roomID, message.song);
     const currentRoom = this.roomStore.getRoom(message.roomID);
 
     this.wss.to(message.roomID).emit('songAdded', currentRoom.allSongs);

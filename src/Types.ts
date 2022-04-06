@@ -6,9 +6,16 @@ export interface Song {
   duration_ms: number;
   artists: SongArtists[];
   votes: number;
+  album: AlbumData;
 }
 
 export interface SongArtists {
   name: string;
   id: string;
+}
+
+export interface AlbumData {
+  images: {
+    url: string;
+  }[];
 }

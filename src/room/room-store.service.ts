@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import { Room } from './room';
 import { makeRoomID } from 'src/Utils';
 import { SpotifyService } from 'src/spotify/spotify.service';
-import { SongArtists } from 'src/Types';
+import { AlbumData, Song, SongArtists } from 'src/Types';
 
 @Injectable()
 export class RoomStoreService {
@@ -61,25 +61,13 @@ export class RoomStoreService {
     return false;
   }
 
-  addSong(
-    roomID: string,
-    songName: string,
-    songID: string,
-    songDuration: number,
-    songArtists: SongArtists[],
-  ) {
+  addSong(roomID: string, song: Song) {
     const room = this.getRoom(roomID);
     if (!room) {
       // TODO
       console.log('Room not found');
     }
 
-    room.addSong({
-      name: songName,
-      id: songID,
-      duration_ms: songDuration,
-      votes: 0,
-      artists: songArtists,
-    });
+    room.addSong(song);
   }
 }
