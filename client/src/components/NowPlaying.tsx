@@ -1,6 +1,6 @@
-import React from "react";
-import { Heading, Image } from "@chakra-ui/react";
-import { SongData } from "../Types";
+import React from 'react';
+import { Heading, Image } from '@chakra-ui/react';
+import { SongData } from '../Types';
 
 interface NowPlayingProps {
   song: SongData;
@@ -15,7 +15,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ song }) => {
         {song.artists.map((artist, index) => (
           <span key={artist.id}>
             {artist.name}
-            {index < song.artists.length - 1 && ", "}
+            {index < song.artists.length - 1 && ', '}
           </span>
         ))}
       </Heading>
