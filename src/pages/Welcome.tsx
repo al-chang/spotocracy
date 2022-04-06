@@ -32,13 +32,13 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
 
   useEffect(() => {
     const getAuthToken = async () => {
-      if (code) {
+      if (code && !authToken) {
         const authToken = await getUserAuthToken(code);
         updateAuthToken(authToken.access_token);
       }
     };
     getAuthToken();
-  }, [code, updateAuthToken]);
+  }, [authToken, code, updateAuthToken]);
 
   return (
     <>

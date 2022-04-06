@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
+import { SongData } from "../Types";
 
 export interface RoomData {
   roomID: string;
-  songQueue: string[];
+  songQueue: SongData[];
 }
 
 const RoomContext = React.createContext<RoomData>({
