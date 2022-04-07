@@ -80,4 +80,26 @@ export class RoomStoreService {
 
     room.addSong(song);
   }
+
+  upvoteSong(roomID: string, songID: string) {
+    const room = this.getRoom(roomID);
+    if (!room) {
+      // TODO
+      console.log('Room not found');
+      return;
+    }
+
+    room.upvoteSong(songID);
+  }
+
+  downvoteSong(roomID: string, songID: string) {
+    const room = this.getRoom(roomID);
+    if (!room) {
+      // TODO
+      console.log('Room not found');
+      return;
+    }
+
+    room.downvoteSong(songID);
+  }
 }

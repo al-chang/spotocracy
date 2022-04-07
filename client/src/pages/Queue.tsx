@@ -40,6 +40,14 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     });
   };
 
+  const upvoteSong = (songID: string) => {
+    socket.emit('upvoteSong', { roomID: roomData.roomID, songID: songID });
+  };
+
+  const downvoteSong = (songID: string) => {
+    socket.emit('downvoteSong', { roomID: roomData.roomID, songID: songID });
+  };
+
   useEffect(() => {
     if (createRoom) {
       socket.emit('createRoom', { spotifyKey: authToken, isPublic: false });
@@ -87,6 +95,12 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
       },
     );
     socket.on('songAddedError', () => {});
+    socket.on('songUpvoted', (songQueue: SongData[]) => {
+      setRoomData({ ...roomData, songQueue: songQueue });
+    });
+    socket.on('songDownvoted', (songQueue: SongData[]) => {
+      setRoomData({ ...roomData, songQueue: songQueue });
+    });
   }, [navigate, roomData, setRoomData, socket]);
 
   return (
@@ -107,6 +121,8 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
                 key={songData.id}
                 songData={songData}
                 style={{ margin: '10px 0' }}
+                upvoteSong={upvoteSong}
+                downvoteSong={downvoteSong}
               />
             ))
           ) : (

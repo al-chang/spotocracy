@@ -1,4 +1,4 @@
-export type SongQueue = Song[];
+// export type SongQueue = Song[];
 
 export interface Song {
   name: string;
