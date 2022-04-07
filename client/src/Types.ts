@@ -17,6 +17,7 @@ export interface SongData {
   duration_ms: number;
   artists: SongArtist[];
   album: AlbumData;
+  votes?: number;
 }
 
 export interface SongArtist {

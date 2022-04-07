@@ -1,4 +1,5 @@
-import { Song, SongQueue } from 'src/Types';
+import { Song } from 'src/Types';
+import SongQueue from './song-queue';
 
 export class Room {
   // At some point the room will need to keep track of the person who made its spotify information to auto play songs.
@@ -20,7 +21,7 @@ export class Room {
     ) => void,
     private publicRoom?: boolean,
   ) {
-    this.songQueue = [];
+    this.songQueue = new SongQueue();
     this.numListeners = 1;
   }
 
@@ -37,7 +38,7 @@ export class Room {
   }
 
   get allSongs() {
-    return this.songQueue.map((song) => song);
+    return this.songQueue.songQueue;
   }
 
   get currentSong() {
@@ -55,29 +56,38 @@ export class Room {
   }
 
   addSong(song: Song): boolean {
-    if (this.songQueue.find((_song) => _song.id === song.id)) return;
+    this.songQueue.addSong(song);
 
-    this.songQueue.push(song);
     if (!this.isPlaying) {
       this.playNextSong();
     }
     return true;
   }
 
+  upvoteSong(songID: string): boolean {
+    const result = this.songQueue.increaseVote(songID);
+    return result;
+  }
+
+  downvoteSong(songID: string): boolean {
+    const result = this.songQueue.decreaseVote(songID);
+    return result;
+  }
+
   private playNextSong() {
-    const songToPlay = this.songQueue.shift();
+    const songToPlay = this.songQueue.getNextSong();
     if (songToPlay) {
       this.isPlaying = true;
       this.nowPlaying = songToPlay;
       this.playSong(this.spotifyAuthToken, songToPlay.id);
-      this.nowPlayingCallback(this.id, songToPlay, this.songQueue);
+      this.nowPlayingCallback(this.id, songToPlay, this.songQueue.songQueue);
       this.currentTimeout = setTimeout(
         () => this.playNextSong(),
         songToPlay.duration_ms,
       );
     } else {
       this.nowPlaying = undefined;
-      this.nowPlayingCallback(this.id, undefined, this.songQueue);
+      this.nowPlayingCallback(this.id, undefined, this.songQueue.songQueue);
       this.isPlaying = false;
     }
   }

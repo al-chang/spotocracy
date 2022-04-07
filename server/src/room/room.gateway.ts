@@ -111,4 +111,42 @@ export class RoomGateway {
 
     this.wss.to(message.roomID).emit('songAdded', currentRoom.allSongs);
   }
+
+  @SubscribeMessage('upvoteSong')
+  handleUpvoteSong(
+    client: Socket,
+    message: {
+      roomID: string;
+      songID: string;
+    },
+  ) {
+    if (!message.roomID) {
+      client.emit('songUpvotedError', 'Unable to upvote song, no room ID.');
+      return;
+    }
+
+    this.roomStore.upvoteSong(message.roomID, message.songID);
+    const currentRoom = this.roomStore.getRoom(message.roomID);
+
+    this.wss.to(message.roomID).emit('songUpvoted', currentRoom.allSongs);
+  }
+
+  @SubscribeMessage('downvoteSong')
+  handleDownvoteSong(
+    client: Socket,
+    message: {
+      roomID: string;
+      songID: string;
+    },
+  ) {
+    if (!message.roomID) {
+      client.emit('songDownvotedError', 'Unable to downvote song, no room ID.');
+      return;
+    }
+
+    this.roomStore.downvoteSong(message.roomID, message.songID);
+    const currentRoom = this.roomStore.getRoom(message.roomID);
+
+    this.wss.to(message.roomID).emit('songDownvoted', currentRoom.allSongs);
+  }
 }
