@@ -102,6 +102,7 @@ export class RoomGateway {
     },
   ) {
     if (!message.roomID) {
+      client.emit('songAddedError', 'Unable to add song, no room ID.');
       return;
     }
 

@@ -26,15 +26,17 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
   const authToken = useAuthTokenContext();
 
   const addSongToQueue = (songData: SongData) => {
+    const songToSend: SongData = {
+      id: songData.id,
+      name: songData.name,
+      duration_ms: songData.duration_ms,
+      artists: songData.artists,
+      album: { images: songData.album.images },
+    };
+
     socket.emit('addSong', {
       roomID: roomData.roomID,
-      song: {
-        id: songData.id,
-        name: songData.name,
-        duration_ms: songData.duration_ms,
-        artists: songData.artists,
-        album: { images: songData.album.images },
-      },
+      song: songToSend,
     });
   };
 
@@ -84,6 +86,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
         setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
       },
     );
+    socket.on('songAddedError', () => {});
   }, [navigate, roomData, setRoomData, socket]);
 
   return (
