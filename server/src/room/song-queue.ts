@@ -43,11 +43,11 @@ export default class SongQueue {
   // Internally we are using inseration sort. This is because our list is guaranteed to be mostly sorted.
   public increaseVote(songID: string): boolean {
     const songPosition = this._songPosition[songID];
-    if (!songPosition) {
+    if (songPosition === undefined) {
       return false;
     }
     const song = this._songQueue[songPosition];
-    song.votes += 1;
+    song.votes = song.votes + 1;
 
     if (songPosition === 0) {
       return true;
@@ -75,11 +75,11 @@ export default class SongQueue {
 
   public decreaseVote(songID: string): boolean {
     const songPosition = this._songPosition[songID];
-    if (!songPosition) {
+    if (songPosition === undefined) {
       return false;
     }
     const song = this._songQueue[songPosition];
-    song.votes -= 1;
+    song.votes = song.votes - 1;
 
     if (songPosition === 0) {
       return true;

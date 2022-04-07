@@ -101,7 +101,19 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     socket.on('songDownvoted', (songQueue: SongData[]) => {
       setRoomData({ ...roomData, songQueue: songQueue });
     });
-  }, [navigate, roomData, setRoomData, socket]);
+
+    return () => {
+      socket.off('joinRoomFailed');
+      socket.off('createRoomFailed');
+      socket.off('createdRoom');
+      socket.off('songAdded');
+      socket.off('joinedRoom');
+      socket.off('nowPlaying');
+      socket.off('songAddedError');
+      socket.off('songUpvoted');
+      socket.off('songDownvoted');
+    };
+  });
 
   return (
     <>
