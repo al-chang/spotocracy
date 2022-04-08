@@ -5,7 +5,7 @@ import { useRoomContext } from '../hooks/RoomContext';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const roomData = useRoomContext();
+  const { roomData } = useRoomContext();
 
   return (
     <>
