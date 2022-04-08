@@ -40,7 +40,7 @@ export default class SongQueue {
     return nextSong;
   }
 
-  // Internally we are using inseration sort. This is because our list is guaranteed to be mostly sorted.
+  // Internally we are using semi-inseration sort. This is because our list is guaranteed to be mostly sorted.
   public increaseVote(songID: string): boolean {
     const songPosition = this._songPosition[songID];
     if (songPosition === undefined) {

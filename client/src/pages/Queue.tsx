@@ -6,7 +6,7 @@ import AddSong from '../components/AddSong';
 import NowPlaying from '../components/NowPlaying';
 import SongVote from '../components/SongVote';
 import { useAuthTokenContext } from '../hooks/AuthTokenContext';
-import { useRoomContext, useRoomUpdateContext } from '../hooks/RoomContext';
+import { useRoomContext } from '../hooks/RoomContext';
 import { SongData } from '../Types';
 
 interface QueueProps {
@@ -18,8 +18,7 @@ interface QueueProps {
 const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
   const navigate = useNavigate();
 
-  const roomData = useRoomContext();
-  const setRoomData = useRoomUpdateContext();
+  const { roomData, setRoomData } = useRoomContext();
 
   const [addSong, setAddSong] = useState<boolean>(false);
 
@@ -67,39 +66,51 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     socket.on('createRoomFailed', () => navigate('/'));
 
     socket.on('createdRoom', (roomID: string) => {
-      setRoomData({
-        ...roomData,
-        roomID: roomID,
-        songQueue: [],
-        nowPlaying: undefined,
+      setRoomData((oldRoomData) => {
+        return {
+          ...oldRoomData,
+          roomID: roomID,
+          songQueue: [],
+          nowPlaying: undefined,
+        };
       });
     });
     socket.on('songAdded', (songList: SongData[]) =>
-      setRoomData({ ...roomData, songQueue: songList }),
+      setRoomData((oldRoomData) => {
+        return { ...oldRoomData, songQueue: songList };
+      }),
     );
     socket.on(
       'joinedRoom',
       (roomID: string, songs: SongData[], nowPlaying: SongData) => {
-        setRoomData({
-          ...roomData,
-          roomID: roomID,
-          songQueue: songs,
-          nowPlaying: nowPlaying,
+        setRoomData((oldRoomData) => {
+          return {
+            ...oldRoomData,
+            roomID: roomID,
+            songQueue: songs,
+            nowPlaying: nowPlaying,
+          };
         });
       },
     );
     socket.on(
       'nowPlaying',
       (song: SongData | undefined, songQueue: SongData[]) => {
-        setRoomData({ ...roomData, nowPlaying: song, songQueue: songQueue });
+        setRoomData((oldRoomData) => {
+          return { ...oldRoomData, nowPlaying: song, songQueue: songQueue };
+        });
       },
     );
     socket.on('songAddedError', () => {});
     socket.on('songUpvoted', (songQueue: SongData[]) => {
-      setRoomData({ ...roomData, songQueue: songQueue });
+      setRoomData((oldRoomData) => {
+        return { ...oldRoomData, songQueue: songQueue };
+      });
     });
     socket.on('songDownvoted', (songQueue: SongData[]) => {
-      setRoomData({ ...roomData, songQueue: songQueue });
+      setRoomData((oldRoomData) => {
+        return { ...oldRoomData, songQueue: songQueue };
+      });
     });
 
     return () => {

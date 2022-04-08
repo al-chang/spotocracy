@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { SongData } from "../Types";
+import React, { useContext, useState } from 'react';
+import { SongData } from '../Types';
 
 export interface RoomData {
   roomID: string;
@@ -7,35 +7,26 @@ export interface RoomData {
   nowPlaying?: SongData;
 }
 
-const RoomContext = React.createContext<RoomData>({
-  roomID: "",
-  songQueue: [],
-});
-const RoomUpdateContext = React.createContext((roomData: RoomData) => {});
+type RoomContextType = {
+  roomData: RoomData;
+  setRoomData: (value: React.SetStateAction<RoomData>) => void;
+};
+
+const RoomContext = React.createContext<RoomContextType>(null!);
 
 export function useRoomContext() {
   return useContext(RoomContext);
 }
 
-export function useRoomUpdateContext() {
-  return useContext(RoomUpdateContext);
-}
-
 export const RoomProvider: React.FC = ({ children }) => {
   const [roomData, setRoomData] = useState<RoomData>({
-    roomID: "",
+    roomID: '',
     songQueue: [],
   });
 
-  const updateRoomData = (roomData: RoomData) => {
-    setRoomData(roomData);
-  };
-
   return (
-    <RoomContext.Provider value={roomData}>
-      <RoomUpdateContext.Provider value={updateRoomData}>
-        {children}
-      </RoomUpdateContext.Provider>
+    <RoomContext.Provider value={{ roomData, setRoomData }}>
+      {children}
     </RoomContext.Provider>
   );
 };
