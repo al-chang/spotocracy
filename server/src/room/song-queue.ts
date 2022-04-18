@@ -37,10 +37,19 @@ export default class SongQueue {
     const nextSong = this._songQueue.shift();
     this._songPosition[nextSong.id] = undefined;
 
+    this.shiftSongPositions();
+
     return nextSong;
   }
 
-  // Internally we are using semi-inseration sort. This is because our list is guaranteed to be mostly sorted.
+  // Not sure if there would be any benefit to making this async. It is an expensive operation.
+  private async shiftSongPositions() {
+    this._songQueue.forEach(
+      (_song, index) => (this._songPosition[_song.id] = index),
+    );
+  }
+
+  // Internally we are using inseration sort. This is because our list is guaranteed to be mostly sorted.
   public increaseVote(songID: string): boolean {
     const songPosition = this._songPosition[songID];
     if (songPosition === undefined) {

@@ -11,7 +11,7 @@ import { HttpService } from '@nestjs/axios';
 export class SpotifyService {
   private clientAccessToken = '';
 
-  constructor(private httpService: HttpService) {
+  constructor() {
     this.updateAccessToken();
   }
 
