@@ -16,6 +16,7 @@ jobs:
           heroku_app_name: ${{secrets.HEROKU_CLIENT_NAME}} #Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           appdir: '/client'
+          healthcheck: 'https://spotocracy-client.herokuapp.com/'
   build-server:
     needs: build-client
     runs-on: ubuntu-latest
@@ -27,3 +28,4 @@ jobs:
           heroku_app_name: ${{secrets.HEROKU_SERVER_NAME}} #Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           appdir: '/server'
+          healthcheck: 'https://spotocracy-server.herokuapp.com/'
