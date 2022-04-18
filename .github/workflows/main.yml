@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-client:
@@ -13,8 +16,8 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: 'spotocracy-client' #Must be unique in Heroku
-          heroku_email: 'chang.alex@northeastern.edu'
+          heroku_app_name: ${{secrets.HEROKU_CLIENT_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
           appdir: '/client'
           buildpack: 'https://github.com/mars/create-react-app-buildpack.git'
   build-server:
@@ -25,6 +28,6 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: 'spotocracy-server' #Must be unique in Heroku
-          heroku_email: 'chang.alex@northeastern.edu'
+          heroku_app_name: ${{secrets.HEROKU_SERVER_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
           appdir: '/server'
