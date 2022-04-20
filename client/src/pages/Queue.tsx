@@ -6,6 +6,7 @@ import AddSong from '../components/AddSong';
 import NowPlaying from '../components/NowPlaying';
 import SongVote from '../components/SongVote';
 import { useAuthTokenContext } from '../hooks/AuthTokenContext';
+import { useErrorContext } from '../hooks/ErrorContext';
 import { useRoomContext } from '../hooks/RoomContext';
 import { SongData } from '../Types';
 
@@ -19,6 +20,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
   const navigate = useNavigate();
 
   const { roomData, setRoomData } = useRoomContext();
+  const { setError } = useErrorContext();
 
   const [addSong, setAddSong] = useState<boolean>(false);
 
@@ -62,8 +64,14 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
   }, [authToken, createRoom, roomID, socket]);
 
   useEffect(() => {
-    socket.on('joinRoomFailed', () => navigate('/'));
-    socket.on('createRoomFailed', () => navigate('/'));
+    socket.on('joinRoomFail', () => {
+      setError('Failed to join room');
+      navigate('/');
+    });
+    socket.on('createRoomFail', () => {
+      setError('Failed to create room');
+      navigate('/');
+    });
 
     socket.on('createdRoom', (roomID: string) => {
       setRoomData((oldRoomData) => {
@@ -101,7 +109,9 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
         });
       },
     );
-    socket.on('songAddedError', () => {});
+    socket.on('songAddedError', () => {
+      setError('Failed to add song');
+    });
     socket.on('songUpvoted', (songQueue: SongData[]) => {
       setRoomData((oldRoomData) => {
         return { ...oldRoomData, songQueue: songQueue };
@@ -125,6 +135,15 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
       socket.off('songDownvoted');
     };
   });
+
+  useEffect(() => {
+    return () => {
+      setRoomData({
+        roomID: '',
+        songQueue: [],
+      });
+    };
+  }, [setRoomData]);
 
   return (
     <>
