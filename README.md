@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e7f01971-d35e-4dbd-b9ad-b45194fd1433/deploy-status)](https://app.netlify.com/sites/spotocracy/deploys)
+
 Spotocracy is a WIP application built for creating collaborative queues that users can vote on.
 
 To run spotocracy, create a .env file in the client and server folders.
