@@ -12,7 +12,12 @@ export class RoomStoreService {
   constructor(private spotifyService: SpotifyService) {}
 
   getRoom(roomID: string): Room | undefined {
-    return this.rooms[roomID];
+    try {
+      return this.rooms[roomID];
+    } catch {
+      console.error(`Failed to find room with room code: ${roomID}`);
+      return undefined;
+    }
   }
 
   getAllRooms(): Room[] {
