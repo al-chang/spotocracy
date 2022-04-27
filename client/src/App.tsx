@@ -31,9 +31,16 @@ const App: React.FC = () => {
   return (
     <>
       <Router>
-        <Header />
         {error && (
-          <Alert status="error">
+          <Alert
+            status="error"
+            position="absolute"
+            zIndex="1"
+            width="80%"
+            left="50%"
+            marginLeft="calc(40% * -1)"
+            borderRadius="10px"
+          >
             <AlertIcon />
             <AlertTitle>An error has occured</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
@@ -45,6 +52,7 @@ const App: React.FC = () => {
             />
           </Alert>
         )}
+        <Header />
         <Box margin="0px 50px">
           <Routes>
             <Route
