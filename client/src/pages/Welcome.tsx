@@ -11,6 +11,7 @@ import {
   Divider,
   Stack,
   useBreakpointValue,
+  Flex,
 } from '@chakra-ui/react';
 
 import { FormControl, FormLabel } from '@chakra-ui/react';
@@ -90,6 +91,8 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
         margin="10vh 0"
         direction={{ base: 'column', md: 'row' }}
         height="100px"
+        justifyContent="center"
+        alignItems={{ base: 'center', md: 'normal' }}
       >
         <div className="join-room-form">
           <FormControl>
@@ -108,7 +111,7 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
               <Button
                 colorScheme="blue"
                 onClick={joinRoom}
-                variant="spotocracy"
+                variant="spotocracy-alt"
               >
                 Join Room
               </Button>
@@ -121,30 +124,32 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
           orientation={dividerOrientation}
         />
 
-        {!authToken ? (
-          // <Button onClick={fetchAuthToken}>Log In With Spotify</Button>
-          // eslint-disable-next-line jsx-a11y/anchor-has-content
-          <a
-            href={`https://accounts.spotify.com/authorize?${stringify({
-              response_type: 'code',
-              client_id: process.env.REACT_APP_CLIENT_ID,
-              scope: process.env.REACT_APP_SCOPE,
-              redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-              state: state,
-            })}`}
-          >
-            Log In With Spotify
-          </a>
-        ) : (
-          <Button
-            onClick={() => {
-              setCreateRoom(true);
-              navigate(`/queue`);
-            }}
-          >
-            Create Room
-          </Button>
-        )}
+        <Flex alignItems="center">
+          {!authToken ? (
+            // eslint-disable-next-line jsx-a11y/anchor-has-content
+            <a
+              href={`https://accounts.spotify.com/authorize?${stringify({
+                response_type: 'code',
+                client_id: process.env.REACT_APP_CLIENT_ID,
+                scope: process.env.REACT_APP_SCOPE,
+                redirect_uri: process.env.REACT_APP_REDIRECT_URI,
+                state: state,
+              })}`}
+            >
+              Log In With Spotify
+            </a>
+          ) : (
+            <Button
+              variant="spotocracy"
+              onClick={() => {
+                setCreateRoom(true);
+                navigate(`/queue`);
+              }}
+            >
+              Create Room
+            </Button>
+          )}
+        </Flex>
       </Stack>
     </>
   );

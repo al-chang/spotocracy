@@ -17,6 +17,7 @@ const AddSong: React.FC<AddSongProps> = ({ submitSong }) => {
   const [songOptions, setSongOptions] = useState<SongSearchResults>();
 
   const handleSearch = async () => {
+    if (!songInput) return;
     const searchResults = await getSongs(songInput);
     setSongOptions(searchResults);
   };
@@ -33,7 +34,9 @@ const AddSong: React.FC<AddSongProps> = ({ submitSong }) => {
             if (e.key === 'Enter') handleSearch();
           }}
         />
-        <Button onClick={handleSearch}>Search</Button>
+        <Button variant="spotocracy-alt" onClick={handleSearch}>
+          Search
+        </Button>
       </Flex>
       {songOptions &&
         songOptions.items.map((songData) => (

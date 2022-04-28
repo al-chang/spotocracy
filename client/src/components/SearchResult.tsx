@@ -1,7 +1,7 @@
-import { Box, Button, Grid } from "@chakra-ui/react";
-import React from "react";
-import { SongData } from "../Types";
-import Song from "./Song";
+import { Box, Button, Grid } from '@chakra-ui/react';
+import React from 'react';
+import { SongData } from '../Types';
+import Song from './Song';
 
 interface SearchResultProps {
   songData: SongData;
@@ -19,7 +19,9 @@ const SearchResult: React.FC<SearchResultProps> = ({
       <Grid templateColumns="4fr 1fr" style={style}>
         <Song songData={songData} />
         <Box alignSelf="center" justifySelf="center">
-          <Button onClick={() => submitSong(songData)}>Add Song</Button>
+          <Button onClick={() => submitSong(songData)} variant="spotocracy">
+            Add Song
+          </Button>
         </Box>
       </Grid>
     </>

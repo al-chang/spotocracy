@@ -59,8 +59,6 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     return () => {
       socket.emit('leaveRoom', roomID);
     };
-    // This is necessary because it does not properly create / join a room with all dependencies
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authToken, createRoom, roomID, socket]);
 
   useEffect(() => {
@@ -151,9 +149,13 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
         <div>
           {roomData.nowPlaying && <NowPlaying song={roomData.nowPlaying} />}
           {addSong ? (
-            <Button onClick={() => setAddSong(false)}>Go To Queue</Button>
+            <Button variant="spotocracy" onClick={() => setAddSong(false)}>
+              Go To Queue
+            </Button>
           ) : (
-            <Button onClick={() => setAddSong(true)}>Add Song</Button>
+            <Button variant="spotocracy" onClick={() => setAddSong(true)}>
+              Add Song
+            </Button>
           )}
         </div>
         <div>

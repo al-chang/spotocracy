@@ -23,7 +23,7 @@ const SongVote: React.FC<SongVoteProps> = ({
       <Flex flexDir="column" alignItems="center">
         <TriangleUpIcon onClick={() => upvoteSong(songData.id)} />
         {songData.votes !== undefined && (
-          <Badge colorScheme="whatsapp">{songData.votes}</Badge>
+          <Badge variant="spotocracy">{songData.votes}</Badge>
         )}
         <TriangleDownIcon onClick={() => downvoteSong(songData.id)} />
       </Flex>

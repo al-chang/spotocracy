@@ -32,6 +32,18 @@ const theme = extendTheme({
           bg: '#1DB954',
           color: '#191414',
         },
+        'spotocracy-alt': {
+          bg: '#191414',
+          color: '#FFFFFF',
+        },
+      },
+    },
+    Badge: {
+      variants: {
+        spotocracy: {
+          bg: '#191414',
+          color: '#1DB954',
+        },
       },
     },
   },

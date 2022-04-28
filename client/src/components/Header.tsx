@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ style }) => {
           />
         </Heading>
         {roomData.roomID && (
-          <Badge colorScheme="green" fontSize={{ base: '12px', md: '24px' }}>
+          <Badge variant="spotocracy" fontSize={{ base: '12px', md: '24px' }}>
             Room ID: {roomData.roomID}
           </Badge>
         )}
