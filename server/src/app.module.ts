@@ -7,10 +7,16 @@ import { SpotifyService } from './spotify/spotify.service';
 import { SpotifyController } from './spotify/spotify.controller';
 import { HttpModule } from '@nestjs/axios';
 import { RoomController } from './room/room.controller';
+import { HealthCheckController } from './health-check/health-check.controller';
 
 @Module({
   imports: [HttpModule],
-  controllers: [AppController, SpotifyController, RoomController],
+  controllers: [
+    AppController,
+    SpotifyController,
+    RoomController,
+    HealthCheckController,
+  ],
   providers: [AppService, RoomStoreService, RoomGateway, SpotifyService],
 })
 export class AppModule {}

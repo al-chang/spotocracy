@@ -16,4 +16,4 @@ jobs:
           heroku_app_name: ${{secrets.HEROKU_SERVER_NAME}} #Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           appdir: '/server'
-          healthcheck: 'https://spotocracy-server.herokuapp.com/'
+          healthcheck: 'https://spotocracy-server.herokuapp.com/health-check'
