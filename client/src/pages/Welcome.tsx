@@ -12,6 +12,7 @@ import {
   Stack,
   useBreakpointValue,
   Flex,
+  Box,
 } from '@chakra-ui/react';
 
 import { FormControl, FormLabel } from '@chakra-ui/react';
@@ -23,14 +24,21 @@ import { generateRandomString, timesWithinHour } from '../utils/Utils';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { AuthTokenLocalData } from '../Types';
 import Helmet from 'react-helmet';
+import { useErrorContext } from '../hooks/ErrorContext';
+import WelcomeModal from '../components/WelcomeModal';
 // import "dotenv/config";
 
 interface WelcomeProps {
+  roomID: string;
   setCreateRoom: (value: boolean) => void;
   setRoomID: (value: string) => void;
 }
 
-const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
+const Welcome: React.FC<WelcomeProps> = ({
+  roomID,
+  setCreateRoom,
+  setRoomID,
+}) => {
   let navigate = useNavigate();
 
   const authToken = useAuthTokenContext();
@@ -44,6 +52,8 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
 
   const search = useLocation().search;
   const code = new URLSearchParams(search).get('code');
+
+  const { setError } = useErrorContext();
 
   const dividerOrientation = useBreakpointValue<'horizontal' | 'vertical'>({
     base: 'horizontal',
@@ -81,8 +91,12 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
   }, [setStoredTokenData, storedTokenData, updateAuthToken]);
 
   const joinRoom = () => {
-    setCreateRoom(false);
-    navigate('/queue');
+    if (roomID.length === 6) {
+      setCreateRoom(false);
+      navigate('/queue');
+    } else {
+      setError('Invalid room id.');
+    }
   };
 
   return (
@@ -90,6 +104,7 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
       <Helmet>
         <title>Spotocracy</title>
       </Helmet>
+      <WelcomeModal />
       <Stack
         className="welcome-form"
         margin="10vh 0"
@@ -98,7 +113,7 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
         justifyContent="center"
         alignItems={{ base: 'center', md: 'normal' }}
       >
-        <div className="join-room-form">
+        <Box className="join-room-form" margin={{ base: '10px 0', md: '0' }}>
           <FormControl>
             <FormLabel htmlFor="room-code">Enter Room Code:</FormLabel>
             <Grid gridTemplateColumns={{ base: '3fr 2fr', md: '6fr 1fr' }}>
@@ -121,12 +136,9 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
               </Button>
             </Grid>
           </FormControl>
-        </div>
+        </Box>
 
-        <Divider
-          margin={{ base: '20px 0', md: '40px' }}
-          orientation={dividerOrientation}
-        />
+        <Divider orientation={dividerOrientation} />
 
         <Flex alignItems="center">
           {!authToken ? (
@@ -145,6 +157,7 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
           ) : (
             <Button
               variant="spotocracy"
+              margin={{ base: '10px 0', md: '0 10px' }}
               onClick={() => {
                 setCreateRoom(true);
                 navigate(`/queue`);

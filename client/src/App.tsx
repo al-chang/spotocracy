@@ -60,7 +60,11 @@ const App: React.FC = () => {
             <Route
               path="/"
               element={
-                <Welcome setCreateRoom={setCreateRoom} setRoomID={setRoomID} />
+                <Welcome
+                  roomID={roomID}
+                  setCreateRoom={setCreateRoom}
+                  setRoomID={setRoomID}
+                />
               }
             />
             <Route

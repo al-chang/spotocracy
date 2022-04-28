@@ -30,6 +30,7 @@ const SongVote: React.FC<SongVoteProps> = ({
       <Flex flexDir="column" alignItems="center">
         <TriangleUpIcon
           color={voteChoice === VoteChoice.UP ? '#1DB954' : '#a8a8a8'}
+          fontSize="20px"
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
             if (voteChoice !== VoteChoice.UP) {
@@ -43,6 +44,7 @@ const SongVote: React.FC<SongVoteProps> = ({
         )}
         <TriangleDownIcon
           color={voteChoice === VoteChoice.DOWN ? '#1DB954' : '#a8a8a8'}
+          fontSize="20px"
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
             if (voteChoice !== VoteChoice.DOWN) {
