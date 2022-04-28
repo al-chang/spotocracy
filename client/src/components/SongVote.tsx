@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, GridItem, Button, Badge } from '@chakra-ui/react';
+import { Grid, Badge, Flex } from '@chakra-ui/react';
 import { SongData } from '../Types';
 import Song from './Song';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
 interface SongVoteProps {
   songData: SongData;
@@ -17,27 +18,15 @@ const SongVote: React.FC<SongVoteProps> = ({
   downvoteSong,
 }) => {
   return (
-    <Grid templateColumns="4fr 1fr" alignItems="center" style={style}>
+    <Grid templateColumns="9fr 1fr" alignItems="center" style={style}>
       <Song songData={songData} />
-      <GridItem className="voting" h="10">
-        {songData.votes && (
+      <Flex flexDir="column" alignItems="center">
+        <TriangleUpIcon onClick={() => upvoteSong(songData.id)} />
+        {songData.votes !== undefined && (
           <Badge colorScheme="whatsapp">{songData.votes}</Badge>
         )}
-        <Button
-          colorScheme="teal"
-          variant="ghost"
-          onClick={() => upvoteSong(songData.id)}
-        >
-          +
-        </Button>
-        <Button
-          colorScheme="teal"
-          variant="ghost"
-          onClick={() => downvoteSong(songData.id)}
-        >
-          -
-        </Button>
-      </GridItem>
+        <TriangleDownIcon onClick={() => downvoteSong(songData.id)} />
+      </Flex>
     </Grid>
   );
 };

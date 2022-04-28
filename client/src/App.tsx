@@ -40,20 +40,22 @@ const App: React.FC = () => {
             left="50%"
             marginLeft="calc(40% * -1)"
             borderRadius="10px"
+            backgroundColor="lightgray"
           >
-            <AlertIcon />
-            <AlertTitle>An error has occured</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertIcon color="red" />
+            <AlertTitle color="red">An error has occured</AlertTitle>
+            <AlertDescription color="black">{error}</AlertDescription>
             <CloseButton
               position="absolute"
               right="8px"
               top="8px"
+              color="black"
               onClick={() => setError('')}
             />
           </Alert>
         )}
         <Header />
-        <Box margin="0px 50px">
+        <Box margin={{ base: '10px 20px', md: '10px 50px' }}>
           <Routes>
             <Route
               path="/"

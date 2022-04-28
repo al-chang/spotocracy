@@ -3,17 +3,46 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { AuthTokenProvider } from './hooks/AuthTokenContext';
 import { RoomProvider } from './hooks/RoomContext';
 import { ErrorProvider } from './hooks/ErrorContext';
+
+const theme = extendTheme({
+  config: {
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
+  },
+  styles: {
+    global: {
+      body: {
+        backgroundColor: '#191414',
+      },
+    },
+  },
+  components: {
+    Heading: {
+      baseStyle: {
+        color: '#1DB954',
+      },
+    },
+    Button: {
+      variants: {
+        spotocracy: {
+          bg: '#1DB954',
+          color: '#191414',
+        },
+      },
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <ErrorProvider>
       <AuthTokenProvider>
         <RoomProvider>
-          <ChakraProvider>
+          <ChakraProvider theme={theme}>
             <App />
           </ChakraProvider>
         </RoomProvider>

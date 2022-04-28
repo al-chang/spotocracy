@@ -29,3 +29,9 @@ export interface SongSearchResults {
   items: SongData[];
   href: string;
 }
+
+export interface AuthTokenLocalData {
+  authToken: string;
+  refreshToken: string;
+  creationTime: string;
+}

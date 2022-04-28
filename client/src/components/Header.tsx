@@ -1,9 +1,13 @@
-import { Badge, Flex, Heading } from '@chakra-ui/react';
+import { Badge, Flex, Heading, Image } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRoomContext } from '../hooks/RoomContext';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  style?: React.CSSProperties;
+}
+
+const Header: React.FC<HeaderProps> = ({ style }) => {
   const navigate = useNavigate();
   const { roomData } = useRoomContext();
 
@@ -13,6 +17,7 @@ const Header: React.FC = () => {
         justifyContent="space-between"
         alignItems="baseline"
         margin={{ base: '10px 20px', md: '10px 50px' }}
+        style={style}
       >
         <Heading
           as="h1"
@@ -20,7 +25,10 @@ const Header: React.FC = () => {
           onClick={() => navigate('/')}
           _hover={{ cursor: 'pointer' }}
         >
-          Spotocracy
+          <Image
+            width={{ base: '50%', md: '30%' }}
+            src="./images/spotocracy.png"
+          />
         </Heading>
         {roomData.roomID && (
           <Badge colorScheme="green" fontSize={{ base: '12px', md: '24px' }}>
