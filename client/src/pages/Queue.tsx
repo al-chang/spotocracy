@@ -10,6 +10,7 @@ import { useErrorContext } from '../hooks/ErrorContext';
 import { useRoomContext } from '../hooks/RoomContext';
 import { SongData } from '../Types';
 import Helmet from 'react-helmet';
+import SongQueueList from '../components/SongQueueList';
 
 interface QueueProps {
   createRoom: boolean;
@@ -164,15 +165,11 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
         </div>
         <div>
           {!addSong ? (
-            roomData.songQueue.map((songData) => (
-              <SongVote
-                key={songData.id}
-                songData={songData}
-                style={{ margin: '10px 0' }}
-                upvoteSong={upvoteSong}
-                downvoteSong={downvoteSong}
-              />
-            ))
+            <SongQueueList
+              songQueue={roomData.songQueue}
+              upvoteSong={upvoteSong}
+              downvoteSong={downvoteSong}
+            />
           ) : (
             <AddSong submitSong={addSongToQueue} />
           )}
