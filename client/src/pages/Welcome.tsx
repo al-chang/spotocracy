@@ -22,6 +22,7 @@ import { stringify } from 'querystring';
 import { generateRandomString, timesWithinHour } from '../utils/Utils';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { AuthTokenLocalData } from '../Types';
+import Helmet from 'react-helmet';
 // import "dotenv/config";
 
 interface WelcomeProps {
@@ -86,6 +87,9 @@ const Welcome: React.FC<WelcomeProps> = ({ setCreateRoom, setRoomID }) => {
 
   return (
     <>
+      <Helmet>
+        <title>Spotocracy</title>
+      </Helmet>
       <Stack
         className="welcome-form"
         margin="10vh 0"

@@ -9,6 +9,7 @@ import { useAuthTokenContext } from '../hooks/AuthTokenContext';
 import { useErrorContext } from '../hooks/ErrorContext';
 import { useRoomContext } from '../hooks/RoomContext';
 import { SongData } from '../Types';
+import Helmet from 'react-helmet';
 
 interface QueueProps {
   createRoom: boolean;
@@ -145,6 +146,9 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
 
   return (
     <>
+      <Helmet>
+        <title>Song Queue</title>
+      </Helmet>
       <Grid templateColumns={{ base: '1fr', md: '1fr 3fr' }} gap="20px">
         <div>
           {roomData.nowPlaying && <NowPlaying song={roomData.nowPlaying} />}

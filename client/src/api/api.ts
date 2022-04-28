@@ -1,5 +1,5 @@
-import axios from "axios";
-import { AuthTokenResponse, SongSearchResults } from "../Types";
+import axios from 'axios';
+import { AuthTokenResponse, SongSearchResults } from '../Types';
 
 export const fetchAuthToken = async () => {
   const result = await axios.get(`${process.env.REACT_APP_URL}/spotify/login/`);
@@ -9,7 +9,7 @@ export const fetchAuthToken = async () => {
 
 export const getUserAuthToken = async (code: string) => {
   const result = await axios.get<AuthTokenResponse>(
-    `${process.env.REACT_APP_URL}/spotify/userAuthToken?code=${code}`
+    `${process.env.REACT_APP_URL}/spotify/userAuthToken?code=${code}`,
   );
   return result.data;
 };
@@ -22,7 +22,8 @@ export const getSongs = async (songName: string, artistName?: string) => {
         songName: songName,
         artistName: artistName,
       },
-    }
+    },
   );
+  console.log(result.data);
   return result.data;
 };
