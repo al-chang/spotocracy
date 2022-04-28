@@ -62,7 +62,7 @@ export class SpotifyController {
     this.spotifyService
       .searchSongByName(songName, artistName)
       .then((result) => {
-        res.send(result.data.tracks);
+        res.send(result?.data?.tracks);
       });
   }
 
