@@ -32,8 +32,10 @@ const SongVote: React.FC<SongVoteProps> = ({
           color={voteChoice === VoteChoice.UP ? '#1DB954' : '#a8a8a8'}
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
-            setVoteChoice(VoteChoice.UP);
-            upvoteSong(songData.id);
+            if (voteChoice !== VoteChoice.UP) {
+              setVoteChoice(VoteChoice.UP);
+              upvoteSong(songData.id);
+            }
           }}
         />
         {songData.votes !== undefined && (
@@ -43,8 +45,10 @@ const SongVote: React.FC<SongVoteProps> = ({
           color={voteChoice === VoteChoice.DOWN ? '#1DB954' : '#a8a8a8'}
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
-            setVoteChoice(VoteChoice.DOWN);
-            downvoteSong(songData.id);
+            if (voteChoice !== VoteChoice.DOWN) {
+              setVoteChoice(VoteChoice.DOWN);
+              downvoteSong(songData.id);
+            }
           }}
         />
       </Flex>
