@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import AddSong from '../components/AddSong';
 import NowPlaying from '../components/NowPlaying';
-import SongVote from '../components/SongVote';
 import { useAuthTokenContext } from '../hooks/AuthTokenContext';
 import { useErrorContext } from '../hooks/ErrorContext';
 import { useRoomContext } from '../hooks/RoomContext';
