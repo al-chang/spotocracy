@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Badge, Flex } from '@chakra-ui/react';
 import { SongData } from '../Types';
 import Song from './Song';
@@ -11,21 +11,42 @@ interface SongVoteProps {
   downvoteSong: (songID: string) => void;
 }
 
+enum VoteChoice {
+  UP,
+  DOWN,
+}
+
 const SongVote: React.FC<SongVoteProps> = ({
   songData,
   style,
   upvoteSong,
   downvoteSong,
 }) => {
+  const [voteChoice, setVoteChoice] = useState<VoteChoice>();
+
   return (
     <Grid templateColumns="9fr 1fr" alignItems="center" style={style}>
       <Song songData={songData} />
       <Flex flexDir="column" alignItems="center">
-        <TriangleUpIcon onClick={() => upvoteSong(songData.id)} />
+        <TriangleUpIcon
+          color={voteChoice === VoteChoice.UP ? '#1DB954' : '#a8a8a8'}
+          _hover={{ cursor: 'pointer' }}
+          onClick={() => {
+            setVoteChoice(VoteChoice.UP);
+            upvoteSong(songData.id);
+          }}
+        />
         {songData.votes !== undefined && (
           <Badge variant="spotocracy">{songData.votes}</Badge>
         )}
-        <TriangleDownIcon onClick={() => downvoteSong(songData.id)} />
+        <TriangleDownIcon
+          color={voteChoice === VoteChoice.DOWN ? '#1DB954' : '#a8a8a8'}
+          _hover={{ cursor: 'pointer' }}
+          onClick={() => {
+            setVoteChoice(VoteChoice.DOWN);
+            downvoteSong(songData.id);
+          }}
+        />
       </Flex>
     </Grid>
   );

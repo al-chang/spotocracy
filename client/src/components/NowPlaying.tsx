@@ -14,11 +14,15 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ song }) => {
       <Heading
         color="#FFFFF"
         size={songNameFontSize}
-        margin={{ base: '0', md: '10px 0' }}
+        margin={{ base: '5px 0', md: '10px 0' }}
       >
         {song.name}
       </Heading>
-      <Heading color="#a8a8a8" size="sm" margin={{ base: '0', md: '10px 0' }}>
+      <Heading
+        color="#a8a8a8"
+        size="sm"
+        margin={{ base: '5px 0', md: '10px 0' }}
+      >
         {song.artists.map((artist, index) => (
           <span key={artist.id}>
             {artist.name}

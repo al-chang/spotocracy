@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Flex, Heading } from '@chakra-ui/react';
+import { Image, Flex, Heading, useBreakpointValue } from '@chakra-ui/react';
 import { SongData } from '../Types';
 
 interface SongProps {
@@ -7,6 +7,8 @@ interface SongProps {
 }
 
 const Song: React.FC<SongProps> = ({ songData }) => {
+  const headerFontSize = useBreakpointValue({ base: 'sm', md: 'md' });
+
   return (
     <Flex flexDir="row" alignItems="center">
       <Image
@@ -19,7 +21,7 @@ const Song: React.FC<SongProps> = ({ songData }) => {
         justifyContent="space-evenly"
         margin="10px"
       >
-        <Heading as="h3" size="md" color="#FFFFFF">
+        <Heading as="h3" size={headerFontSize} color="#FFFFFF">
           {songData.name}
         </Heading>
         <Heading as="h4" size="sm" color="#a8a8a8">

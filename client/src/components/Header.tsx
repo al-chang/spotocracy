@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ style }) => {
     <>
       <Flex
         justifyContent="space-between"
-        alignItems="baseline"
+        alignItems="center"
         margin={{ base: '10px 20px', md: '10px 50px' }}
         style={style}
       >
