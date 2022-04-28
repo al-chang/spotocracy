@@ -24,6 +24,5 @@ export const getSongs = async (songName: string, artistName?: string) => {
       },
     },
   );
-  console.log(result.data);
   return result.data;
 };
