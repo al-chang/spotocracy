@@ -3,7 +3,6 @@ import { AuthTokenResponse, SongSearchResults } from '../Types';
 
 export const fetchAuthToken = async () => {
   const result = await axios.get(`${process.env.REACT_APP_URL}/spotify/login/`);
-  console.log(result);
   return result;
 };
 

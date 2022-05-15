@@ -68,7 +68,7 @@ export class RoomStoreService {
   deleteRoom(roomID: string): boolean {
     const room = this.rooms[roomID];
     if (room) {
-      this.rooms = undefined;
+      this.rooms[roomID] = undefined;
       return true;
     }
 

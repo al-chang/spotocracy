@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Badge, Flex } from '@chakra-ui/react';
 import { SongData } from '../Types';
 import Song from './Song';
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { useRoomContext } from '../hooks/RoomContext';
 
 interface SongVoteProps {
   songData: SongData;
@@ -11,9 +12,9 @@ interface SongVoteProps {
   downvoteSong: (songID: string) => void;
 }
 
-enum VoteChoice {
-  UP,
-  DOWN,
+export enum VoteChoice {
+  UP = 'up',
+  DOWN = 'down',
 }
 
 const SongVote: React.FC<SongVoteProps> = ({
@@ -22,7 +23,8 @@ const SongVote: React.FC<SongVoteProps> = ({
   upvoteSong,
   downvoteSong,
 }) => {
-  const [voteChoice, setVoteChoice] = useState<VoteChoice>();
+  const { roomData, setRoomData } = useRoomContext();
+  const voteChoice = roomData.songVotes[songData.id];
 
   return (
     <Grid templateColumns="9fr 1fr" alignItems="center" style={style}>
@@ -34,8 +36,18 @@ const SongVote: React.FC<SongVoteProps> = ({
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
             if (voteChoice !== VoteChoice.UP) {
-              setVoteChoice(VoteChoice.UP);
+              if (voteChoice !== undefined) upvoteSong(songData.id);
+
               upvoteSong(songData.id);
+              setRoomData((oldRoomData) => {
+                return {
+                  ...oldRoomData,
+                  songVotes: {
+                    ...oldRoomData.songVotes,
+                    [songData.id]: VoteChoice.UP,
+                  },
+                };
+              });
             }
           }}
         />
@@ -48,8 +60,17 @@ const SongVote: React.FC<SongVoteProps> = ({
           _hover={{ cursor: 'pointer' }}
           onClick={() => {
             if (voteChoice !== VoteChoice.DOWN) {
-              setVoteChoice(VoteChoice.DOWN);
+              if (voteChoice !== undefined) downvoteSong(songData.id);
               downvoteSong(songData.id);
+              setRoomData((oldRoomData) => {
+                return {
+                  ...oldRoomData,
+                  songVotes: {
+                    ...oldRoomData.songVotes,
+                    [songData.id]: VoteChoice.DOWN,
+                  },
+                };
+              });
             }
           }}
         />

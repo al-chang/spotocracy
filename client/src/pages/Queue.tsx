@@ -54,7 +54,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
     if (createRoom) {
       socket.emit('createRoom', { spotifyKey: authToken, isPublic: false });
     } else {
-      socket.emit('joinRoom', roomID);
+      socket.emit('joinRoom', roomID.trim().toUpperCase());
     }
 
     return () => {
@@ -79,6 +79,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
           roomID: roomID,
           songQueue: [],
           nowPlaying: undefined,
+          songVotes: {},
         };
       });
     });
@@ -96,6 +97,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
             roomID: roomID,
             songQueue: songs,
             nowPlaying: nowPlaying,
+            songVotes: {},
           };
         });
       },
@@ -104,7 +106,14 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
       'nowPlaying',
       (song: SongData | undefined, songQueue: SongData[]) => {
         setRoomData((oldRoomData) => {
-          return { ...oldRoomData, nowPlaying: song, songQueue: songQueue };
+          return {
+            ...oldRoomData,
+            nowPlaying: song,
+            songQueue: songQueue,
+            songVotes: song
+              ? { ...oldRoomData.songVotes, [song.id]: undefined }
+              : oldRoomData.songVotes,
+          };
         });
       },
     );
@@ -140,6 +149,7 @@ const Queue: React.FC<QueueProps> = ({ createRoom, roomID, socket }) => {
       setRoomData({
         roomID: '',
         songQueue: [],
+        songVotes: {},
       });
     };
   }, [setRoomData]);

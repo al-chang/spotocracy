@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
+import { VoteChoice } from '../components/SongVote';
 import { SongData } from '../Types';
 
 export interface RoomData {
   roomID: string;
   songQueue: SongData[];
   nowPlaying?: SongData;
+  songVotes: { [songID: string]: VoteChoice | undefined };
 }
 
 type RoomContextType = {
@@ -22,6 +24,7 @@ export const RoomProvider: React.FC = ({ children }) => {
   const [roomData, setRoomData] = useState<RoomData>({
     roomID: '',
     songQueue: [],
+    songVotes: {},
   });
 
   return (

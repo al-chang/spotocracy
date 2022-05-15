@@ -13,6 +13,7 @@ import {
   CloseButton,
 } from '@chakra-ui/react';
 import { useErrorContext } from './hooks/ErrorContext';
+import Footer from './components/Footer';
 
 const App: React.FC = () => {
   const [roomID, setRoomID] = useState('');
@@ -55,7 +56,7 @@ const App: React.FC = () => {
           </Alert>
         )}
         <Header />
-        <Box margin={{ base: '10px 20px', md: '10px 50px' }}>
+        <Box margin={{ base: '10px 20px', md: '10px 50px' }} minHeight="80vh">
           <Routes>
             <Route
               path="/"
@@ -79,6 +80,7 @@ const App: React.FC = () => {
             />
           </Routes>
         </Box>
+        <Footer />
       </Router>
     </>
   );

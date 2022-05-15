@@ -84,7 +84,7 @@ export class RoomGateway {
     }
     const numListeners = currentRoom.decrementListeners();
     if (numListeners === 0) {
-      this.roomStore.deleteRoom(room);
+      // this.roomStore.deleteRoom(room);
     }
     client.leave(room);
     client.on('disconnect', () => {
