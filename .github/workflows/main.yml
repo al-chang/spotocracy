@@ -9,7 +9,6 @@ jobs:
   build-server:
     runs-on: ubuntu-latest
     steps:
-      - name: deploy back-end
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
